@@ -285,17 +285,7 @@ details li{margin:4px 0}
     w.appendChild(b); app.appendChild(w);
   }
 
-  function teacherBox(){
-    return el("details",null,
-      '<summary>Für die Lehrkraft (Lösungen &amp; Ablauf)</summary>'+
-      '<ol><li><b>Station 1:</b> Gestern = Adverb · backte = Verb · leckere = Adjektiv · Plätzchen = Nomen → Ziffer 4</li>'+
-      '<li><b>Station 2:</b> zogen · geschrieben · fiel · werden → Ziffer 8</li>'+
-      '<li><b>Station 3:</b> dass · das · dass · Das · dass → Ziffer 1</li>'+
-      '<li><b>Station 4:</b> Personifikation · Vergleich · Metapher · Übertreibung → Ziffer 6</li>'+
-      '<li><b>Station 5:</b> NCHEES = SCHNEE · ZEREK = KERZE · RNSET = STERN · TNEDVA = ADVENT → Ziffer 7</li></ol>'+
-      '<p><b>Endcode:</b> 48167. Ein Tipp kostet 2 Minuten. Die Stationen können in beliebiger Reihenfolge gelöst werden. Der Fortschritt bleibt beim Neuladen erhalten. Schnelle Gruppen können ihre Lösungen zum Abschluss kurz vorlesen und begründen. Bei 30 Minuten ist eine Stationszeit von ca. 5 Minuten realistisch.</p>'+
-      '<p><button class="btn ghost" id="resetBtn" type="button">Spiel zurücksetzen</button></p>');
-  }
+  function teacherBox(){ return document.createDocumentFragment(); }
   document.addEventListener("click",function(e){ if(e.target&&e.target.id==="resetBtn"){ if(confirm("Spiel wirklich zurücksetzen?")) reset(); } });
 
   load();

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escape Game: Die Schlitten-Panne (Deutsch)</title>
+<style>
+:root{
+  --bg:#f5f8f4; --card:#ffffff; --ink:#1d2b26; --muted:#4d625a; --pine:#163a2f; --teal:#1f6b55;
+  --gold:#f2b84b; --red:#a3292c; --tint:#e9f1ec; --good:#2f7d32; --bad:#b0382f; --line:#c8d9cf; --onred:#ffffff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0f1b17; --card:#172a23; --ink:#e9f2ee; --muted:#a9bfb6; --pine:#163a2f; --teal:#3fae8c;
+    --gold:#f6c766; --red:#c0393d; --tint:#1e362d; --good:#7bd07f; --bad:#f08a72; --line:#2d493d;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f1b17; --card:#172a23; --ink:#e9f2ee; --muted:#a9bfb6; --pine:#163a2f; --teal:#3fae8c;
+  --gold:#f6c766; --red:#c0393d; --tint:#1e362d; --good:#7bd07f; --bad:#f08a72; --line:#2d493d;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Calibri,"Segoe UI",system-ui,-apple-system,Arial,sans-serif;font-size:18px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--pine);z-index:10}
+header{background:var(--pine);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.bar{max-width:900px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar h1{font-family:Cambria,Georgia,serif;font-size:20px;margin:0;flex:1 1 180px}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:22px;background:rgba(255,255,255,.14);padding:4px 12px;border-radius:999px;min-width:92px;text-align:center}
+.timer.low{background:var(--gold);color:#1d2b26}
+main{max-width:900px;margin:0 auto;padding:18px 16px 60px}
+.hero{background:var(--pine);color:#fff;border-radius:18px;padding:24px 22px;margin-bottom:18px}
+.hero .kicker{color:var(--gold);font-weight:700;letter-spacing:.12em;font-size:13px}
+.hero h2{font-family:Cambria,Georgia,serif;font-size:32px;margin:6px 0 10px;line-height:1.15}
+.hero p{margin:0 0 12px;color:#e3f0ea}
+.card{background:var(--card);border-radius:16px;padding:18px;border:1px solid var(--line);margin-bottom:16px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px 18px;cursor:pointer;background:var(--teal);color:#fff;min-height:48px}
+.btn.alt{background:var(--gold);color:#1d2b26}
+.btn.red{background:var(--red);color:var(--onred)}
+.btn.ghost{background:var(--tint);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.chip:focus-visible,.st:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.code{display:flex;gap:8px;justify-content:center;margin:10px 0 4px;flex-wrap:wrap}
+.digit{width:52px;height:64px;border-radius:12px;background:var(--tint);border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;font-family:Cambria,Georgia,serif;font-size:34px;font-weight:700;color:var(--pine)}
+.digit.on{background:var(--red);border:2px solid var(--red);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.st .no{display:inline-flex;width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;align-items:center;justify-content:center;font-weight:700;font-size:20px;margin-bottom:8px}
+.st h3{margin:0 0 4px;font-family:Cambria,Georgia,serif;font-size:21px;color:var(--pine)}
+.st p{margin:0;color:var(--muted);font-size:16px}
+.st.done{background:var(--tint)}
+.st.done .no{background:var(--good)}
+.tag{display:inline-block;margin-top:8px;font-size:14px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--tint);color:var(--ink)}
+.st.done .tag{background:var(--good);color:#fff}
+h2.t{font-family:Cambria,Georgia,serif;color:var(--pine);margin:0 0 6px;font-size:28px}
+.story{color:var(--muted);margin:0 0 14px}
+.sent{font-size:20px;font-weight:700;background:var(--tint);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.row label{flex:1 1 260px}
+select,input[type=text]{font:inherit;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-height:46px;max-width:100%}
+select{flex:1 1 200px}
+input[type=text]{flex:1 1 200px}
+.ok{border-color:var(--good)!important}
+.no-{border-color:var(--bad)!important}
+.msg{margin-top:12px;font-weight:700;min-height:1.4em}
+.msg.good{color:var(--good)} .msg.bad{color:var(--bad)}
+.reward{background:var(--red);color:#fff;border-radius:14px;padding:14px 16px;margin-top:14px;font-weight:700}
+.reward b{font-size:28px;font-family:Cambria,Georgia,serif;color:var(--gold)}
+.row2{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.hint{background:var(--tint);border-radius:12px;padding:12px 14px;margin-top:12px;border:1px solid var(--line)}
+details{margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+summary{cursor:pointer;font-weight:700;color:var(--pine)}
+details li{margin:4px 0}
+.win{text-align:center}
+.win h2{font-family:Cambria,Georgia,serif;font-size:34px;color:var(--pine);margin:0 0 6px}
+.big{font-size:60px;line-height:1}
+.candles{font-size:26px;letter-spacing:.2em;margin:4px 0 0;text-align:center}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <h1>🎄 Die Schlitten-Panne</h1>
+  <div class="timer" id="timer" aria-live="off">30:00</div>
+</div></header>
+<main id="app"></main>
+
+<script>
+(function(){
+  "use strict";
+  var TOTAL = 30*60;
+  var PENALTY = 120;
+  var FINAL = "48167";
+  var KEY = "escape-deutsch-advent-v1";
+
+  var state = { started:null, solved:{}, penalty:0, finished:false, hints:{} };
+  function load(){ try{ var s=localStorage.getItem(KEY); if(s){ var o=JSON.parse(s); if(o&&typeof o==="object"){ state=Object.assign(state,o);} } }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function reset(){ state={started:null,solved:{},penalty:0,finished:false,hints:{}}; save(); var t=$("#timer"); t.classList.remove("low"); tick(); showHome(); }
+
+  var $ = function(s,e){ return (e||document).querySelector(s); };
+  function norm(t){ return String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ß/g,"ss").replace(/[^a-z0-9]/g,""); }
+  function el(tag, attrs, html){ var e=document.createElement(tag); if(attrs){ for(var k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } } if(html!=null) e.innerHTML=html; return e; }
+  var app = $("#app");
+  function fmt(s){ var neg=s<0; s=Math.abs(s); var m=Math.floor(s/60), r=s%60; return (neg?"+":"")+String(m).padStart(2,"0")+":"+String(r).padStart(2,"0"); }
+  function elapsed(){ return state.started ? Math.floor((Date.now()-state.started)/1000)+state.penalty : 0; }
+  var tInt=null;
+  function tick(){
+    var t=$("#timer");
+    if(state.finished){ t.textContent="✓"; t.classList.remove("low"); return; }
+    if(!state.started){ t.textContent=fmt(TOTAL); return; }
+    var left=TOTAL-elapsed(); t.textContent=fmt(left); t.classList.toggle("low", left<=300);
+  }
+  function startTimer(){ if(tInt) clearInterval(tInt); tInt=setInterval(tick,1000); tick(); }
+
+  // ---------- Aufgabentypen ----------
+  // Auswahl-Aufgabe: Liste von [Text, richtigeOptionIndex] mit gemeinsamen Optionen
+  function selectTask(box, done, items, opts, btnLabel, okText, badText){
+    var sels=[];
+    items.forEach(function(q){
+      var row=el("div",{class:"row"}); row.appendChild(el("label",null,q[0]));
+      var s=el("select",{"aria-label":q[0]});
+      opts.forEach(function(o,k){ s.appendChild(el("option",{value:k},o)); });
+      row.appendChild(s); box.appendChild(row); sels.push(s);
+    });
+    var msg=el("div",{class:"msg"}); var b=el("button",{class:"btn"},btnLabel);
+    b.onclick=function(){ var all=true;
+      sels.forEach(function(s,i){ var ok=(+s.value===items[i][1]); s.classList.toggle("ok",ok); s.classList.toggle("no-",!ok); if(!ok) all=false; });
+      if(all){ msg.className="msg good"; msg.textContent=okText; done(); } else { msg.className="msg bad"; msg.textContent=badText; } };
+    box.appendChild(b); box.appendChild(msg);
+  }
+  // Eingabe-Aufgabe: [Beschriftung, [akzeptierte Antworten]]
+  function inputTask(box, done, items, btnLabel, okText, badText){
+    var ins=[];
+    items.forEach(function(q){
+      var row=el("div",{class:"row"}); row.appendChild(el("label",null,q[0]));
+      var i=el("input",{type:"text","aria-label":q[0],autocomplete:"off",autocapitalize:"none",spellcheck:"false"});
+      row.appendChild(i); box.appendChild(row); ins.push(i);
+    });
+    var msg=el("div",{class:"msg"}); var b=el("button",{class:"btn"},btnLabel);
+    b.onclick=function(){ var all=true;
+      ins.forEach(function(i,k){ var ok=items[k][1].indexOf(norm(i.value))>-1; i.classList.toggle("ok",ok); i.classList.toggle("no-",!ok); if(!ok) all=false; });
+      if(all){ msg.className="msg good"; msg.textContent=okText; done(); } else { msg.className="msg bad"; msg.textContent=badText; } };
+    box.appendChild(b); box.appendChild(msg);
+  }
+
+  // ---------- Stationen ----------
+  var stations = [
+    { id:1, icon:"🎁", title:"Wortarten-Werkstatt", teaser:"Welche Wortart steckt in jedem Wort?", digit:"4",
+      hint:"Adverbien sagen, wann, wo oder wie etwas geschieht („gestern“, „dort“). Adjektive beschreiben Nomen. Nomen schreibt man groß.",
+      render:function(box, done){
+        box.innerHTML='<p class="story">Der Wichtel Wilfried hat die Wunschzettel durcheinandergebracht. Nur wer die Wortarten erkennt, kann sie wieder sortieren.</p><div class="sent">Gestern backte Mia leckere Plätzchen.</div>';
+        selectTask(box, done, [["Gestern",3],["backte",2],["leckere",4],["Plätzchen",1]],
+          ["– bitte wählen –","Nomen","Verb","Adverb","Adjektiv"],
+          "Wortarten prüfen","Richtig! Die Wunschzettel sind sortiert.","Noch nicht alles richtig – rot markierte Wörter prüfen.");
+      }},
+    { id:2, icon:"⏳", title:"Zeitformen-Uhr", teaser:"Der Schlitten steckt in der Zeit fest.", digit:"8",
+      hint:"Manche Verben ändern den Vokal: ziehen–zog–gezogen, fallen–fiel. Perfekt = haben/sein + Partizip II. Futur I = werden + Infinitiv.",
+      render:function(box, done){
+        box.innerHTML='<p class="story">Die Schlitten-Uhr zeigt die falsche Zeit an. Setzt jede Verbform in der gesuchten Zeitform ein.</p>';
+        inputTask(box, done, [
+          ["Präteritum: Die Rentiere ___ den Schlitten. (ziehen)",["zogen"]],
+          ["Perfekt: Der Wichtel hat einen Brief ___. (schreiben)",["geschrieben"]],
+          ["Präteritum: Der Schnee ___ leise. (fallen)",["fiel"]],
+          ["Futur I: Wir ___ Lieder singen. (Hilfsverb)",["werden"]]
+        ],"Zeitformen prüfen","Die Uhr tickt wieder richtig!","Mindestens eine Verbform stimmt noch nicht.");
+      }},
+    { id:3, icon:"📜", title:"Das oder dass?", teaser:"Die Rentier-Post braucht die richtige Schreibung.", digit:"1",
+      hint:"Probe: Kann man „dieses“ oder „welches“ einsetzen? Dann schreibt man „das“. Sonst „dass“ (Satz mit „dass“ nach Komma).",
+      render:function(box, done){
+        box.innerHTML='<p class="story">Die Rentiere haben Briefe verloren, in denen „das“ und „dass“ verwechselt wurden. Wählt jeweils die richtige Schreibung.</p>';
+        selectTask(box, done, [
+          ["Ich hoffe, ___ der Schlitten bald fliegt.",2],
+          ["Das ist das Geschenk, ___ ich dir gebe.",1],
+          ["Weißt du, ___ morgen Heiligabend ist?",2],
+          ["___ Lebkuchenhaus riecht herrlich.",1],
+          ["Der Wichtel freut sich, ___ alle lachen.",2]
+        ],["– bitte wählen –","das","dass"],"Briefe prüfen","Alle Briefe sind korrigiert!","Noch nicht alles richtig – macht die Probe mit „dieses“.");
+      }},
+    { id:4, icon:"❄️", title:"Winterpoesie", teaser:"Welches Stilmittel steckt in der Zeile?", digit:"6",
+      hint:"Personifikation: Dinge handeln wie Menschen. Vergleich: mit „wie“. Metapher: Gleichsetzung ohne „wie“. Übertreibung: viel zu groß ausgedrückt.",
+      render:function(box, done){
+        box.innerHTML='<p class="story">Im Wintergedicht des Weihnachtsmanns stecken Stilmittel. Ordnet jeder Zeile das richtige zu.</p>';
+        selectTask(box, done, [
+          ["„Der Schnee tanzt vor dem Fenster.“",1],
+          ["„Die Nacht war so kalt wie Eis.“",2],
+          ["„Die Kinder sind kleine Sonnen im Dunkeln.“",3],
+          ["„Ich habe dir schon tausendmal gesagt: Pack deine Geschenke ein!“",4]
+        ],["– bitte wählen –","Personifikation","Vergleich","Metapher","Übertreibung"],"Stilmittel prüfen","Dichterisch perfekt!","Noch nicht alles richtig – denkt an die Tipps.");
+      }},
+    { id:5, icon:"🕯️", title:"Buchstabensalat", teaser:"Aus Wirrwarr werden Adventswörter.", digit:"7",
+      hint:"Alle Wörter gehören zu Advent und Winter. Eines leuchtet auf dem Adventskranz, eines fällt vom Himmel, eines steht auf dem Tannenbaum, eines ist die Zeit vor Weihnachten.",
+      render:function(box, done){
+        box.innerHTML='<p class="story">Ein Wichtel hat auf der Schreibmaschine gespielt, und die Buchstaben sind durcheinander. Bringt sie wieder in die richtige Reihenfolge.</p>';
+        inputTask(box, done, [
+          ["N C H E E S",["schnee"]],
+          ["Z E R E K",["kerze"]],
+          ["R N S E T",["stern"]],
+          ["T N E D V A",["advent"]]
+        ],"Wörter prüfen","Alle vier Wörter gefunden!","Noch nicht alle Wörter stimmen – nutzt den Tipp.");
+      }}
+  ];
+
+  // ---------- Ansichten ----------
+  function solvedCount(){ return stations.filter(function(s){return state.solved[s.id];}).length; }
+  function codeRow(){
+    var h='<div class="code" aria-label="Gesammelter Code">';
+    stations.forEach(function(s){ h+='<div class="digit'+(state.solved[s.id]?' on':'')+'">'+(state.solved[s.id]?s.digit:'?')+'</div>'; });
+    return h+'</div>';
+  }
+  function candles(){ var h=""; for(var i=0;i<5;i++){ h+=(i<solvedCount()?"🕯️":"▫️"); } return '<div class="candles" aria-hidden="true">'+h+'</div>'; }
+
+  function showHome(){
+    window.scrollTo(0,0);
+    if(!state.started){
+      app.innerHTML='';
+      var hero=el("section",{class:"hero"},
+        '<div class="kicker">ESCAPE GAME · DEUTSCH · KLASSE 7</div>'+
+        '<h2>Die Schlitten-Panne</h2>'+
+        '<p>Oh nein! Der Weihnachtsmann-Schlitten steht still. Der Wichtel Wilfried hat den <b>5-stelligen Startcode</b> verloren, und jede Station verrät eine Ziffer.</p>'+
+        '<p>Ihr habt <b>30 Minuten</b>. Arbeitet in Gruppen von 3–4 Personen an einem Gerät. Ein Tipp kostet 2 Minuten. Ihr braucht weder Buch noch Atlas.</p>');
+      var b=el("button",{class:"btn alt"},"Mission starten");
+      b.onclick=function(){ state.started=Date.now(); save(); startTimer(); showHome(); };
+      hero.appendChild(b); app.appendChild(hero); app.appendChild(teacherBox());
+      return;
+    }
+    if(state.finished){ showWin(); return; }
+    app.innerHTML='';
+    app.appendChild(el("div",{class:"card"},'<b>Gesammelter Code</b> ('+solvedCount()+' von 5 Ziffern)'+codeRow()+candles()));
+    var g=el("div",{class:"grid"});
+    stations.forEach(function(s){
+      var d=!!state.solved[s.id];
+      var b=el("button",{class:"st"+(d?" done":""),type:"button"},
+        '<span class="no">'+(d?'✓':s.id)+'</span><h3>'+s.icon+' '+s.title+'</h3><p>'+s.teaser+'</p><span class="tag">'+(d?'Gelöst – Ziffer '+s.digit:'Offen')+'</span>');
+      b.onclick=function(){ showStation(s); };
+      g.appendChild(b);
+    });
+    app.appendChild(g);
+    if(solvedCount()===5){
+      var f=el("div",{class:"card",style:"margin-top:16px"},'<h2 class="t">🛷 Schlitten starten</h2><p class="story">Alle Ziffern sind gesammelt! Gebt den 5-stelligen Code in der Reihenfolge der Stationen 1 bis 5 ein.</p>');
+      var row=el("div",{class:"row"}); var i=el("input",{type:"text",inputmode:"numeric",maxlength:"5","aria-label":"Startcode",autocomplete:"off"}); var b=el("button",{class:"btn red"},"Starten");
+      var msg=el("div",{class:"msg"});
+      b.onclick=function(){ if(i.value.replace(/\D/g,"")===FINAL){ state.finished=true; state.endSeconds=elapsed(); save(); tick(); showWin(); } else { msg.className="msg bad"; msg.textContent="Falscher Code. Prüft die Reihenfolge der Ziffern."; } };
+      row.appendChild(i); row.appendChild(b); f.appendChild(row); f.appendChild(msg); app.appendChild(f);
+    }
+    app.appendChild(teacherBox());
+  }
+
+  function showStation(s){
+    window.scrollTo(0,0);
+    app.innerHTML='';
+    var back=el("button",{class:"btn ghost"},"← Zur Übersicht"); back.onclick=showHome;
+    var card=el("div",{class:"card",style:"margin-top:12px"},'<h2 class="t">'+s.icon+' Station '+s.id+': '+s.title+'</h2>');
+    var box=el("div"); card.appendChild(box);
+    var rewardSlot=el("div");
+    s.render(box, function(){
+      if(!state.solved[s.id]){ state.solved[s.id]=true; save(); }
+      rewardSlot.innerHTML='<div class="reward">🔑 Ziffer für den Code: <b>'+s.digit+'</b></div>';
+      var go=el("button",{class:"btn alt",style:"margin-top:12px"},"Weiter zur Übersicht"); go.onclick=showHome; rewardSlot.appendChild(go);
+    });
+    card.appendChild(rewardSlot);
+    if(state.solved[s.id]){ rewardSlot.innerHTML='<div class="reward">🔑 Ziffer für den Code: <b>'+s.digit+'</b></div>'; }
+    var hs=el("div",{class:"row2"});
+    var hb=el("button",{class:"btn ghost"},"💡 Tipp (kostet 2 Min.)"); var hbox=el("div",{class:"hint hidden"},s.hint);
+    if(state.hints[s.id]){ hbox.classList.remove("hidden"); hb.disabled=true; }
+    hb.onclick=function(){ if(!state.hints[s.id]){ state.hints[s.id]=true; state.penalty+=PENALTY; save(); tick(); } hbox.classList.remove("hidden"); hb.disabled=true; };
+    hs.appendChild(hb); card.appendChild(hs); card.appendChild(hbox);
+    app.appendChild(back); app.appendChild(card);
+  }
+
+  function showWin(){
+    window.scrollTo(0,0);
+    var secs=state.endSeconds||elapsed(); var left=TOTAL-secs;
+    app.innerHTML='';
+    var w=el("div",{class:"card win"},
+      '<div class="big">🛷✨</div><h2>Der Schlitten fliegt!</h2>'+
+      '<p>Der Weihnachtsmann kann pünktlich losfahren. Ihr habt alle Rätsel gelöst.</p>'+
+      '<p><b>Eure Zeit:</b> '+fmt(secs)+' (inklusive Tipp-Strafen)'+(left>=0?' – noch '+fmt(left)+' übrig!':' – etwas über der Zeit, trotzdem geschafft!')+'</p>'+
+      '<p>Frohe Weihnachten und eine schöne Adventszeit! 🎄</p>');
+    var b=el("button",{class:"btn ghost"},"Spiel neu starten"); b.onclick=function(){ if(confirm("Wirklich neu starten? Der Fortschritt geht verloren.")) reset(); };
+    w.appendChild(b); app.appendChild(w);
+  }
+
+  function teacherBox(){
+    return el("details",null,
+      '<summary>Für die Lehrkraft (Lösungen &amp; Ablauf)</summary>'+
+      '<ol><li><b>Station 1:</b> Gestern = Adverb · backte = Verb · leckere = Adjektiv · Plätzchen = Nomen → Ziffer 4</li>'+
+      '<li><b>Station 2:</b> zogen · geschrieben · fiel · werden → Ziffer 8</li>'+
+      '<li><b>Station 3:</b> dass · das · dass · Das · dass → Ziffer 1</li>'+
+      '<li><b>Station 4:</b> Personifikation · Vergleich · Metapher · Übertreibung → Ziffer 6</li>'+
+      '<li><b>Station 5:</b> NCHEES = SCHNEE · ZEREK = KERZE · RNSET = STERN · TNEDVA = ADVENT → Ziffer 7</li></ol>'+
+      '<p><b>Endcode:</b> 48167. Ein Tipp kostet 2 Minuten. Die Stationen können in beliebiger Reihenfolge gelöst werden. Der Fortschritt bleibt beim Neuladen erhalten. Schnelle Gruppen können ihre Lösungen zum Abschluss kurz vorlesen und begründen. Bei 30 Minuten ist eine Stationszeit von ca. 5 Minuten realistisch.</p>'+
+      '<p><button class="btn ghost" id="resetBtn" type="button">Spiel zurücksetzen</button></p>');
+  }
+  document.addEventListener("click",function(e){ if(e.target&&e.target.id==="resetBtn"){ if(confirm("Spiel wirklich zurücksetzen?")) reset(); } });
+
+  load();
+  if(state.started&&!state.finished) startTimer(); else tick();
+  showHome();
+})();
+</script>
+</body>
+</html>
